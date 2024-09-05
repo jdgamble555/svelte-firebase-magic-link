@@ -5,13 +5,26 @@
 
 	let emailSent = false;
 
-	const isConfirmPage = isMagicLinkURL();
+	let isConfirmPage = isMagicLinkURL();
 
-	onMount(detectMagicLink);
+	let errorMessage: string | null = null;
+
+	onMount(() => {
+		detectMagicLink().then((signInError) => {
+			if (signInError) {
+				isConfirmPage = false;
+				errorMessage = signInError.message;
+			}
+		});
+	});
 
 	const confirmMagicLink = async (event: SubmitEvent) => {
 		const email = getEmail(event);
-		await signInWithMagic(email);
+		const signInError = await signInWithMagic(email);
+		if (signInError) {
+			isConfirmPage = false;
+			errorMessage = signInError.message;
+		}
 	};
 
 	const sendLink = async (event: SubmitEvent) => {
@@ -56,6 +69,11 @@
 	{#if emailSent}
 		<p class="text-red-600">
 			Email Sent! Check your mailbox. If you don't see it look under junk or spam!
+		</p>
+	{/if}
+	{#if errorMessage}
+		<p class="text-red-600">
+			{errorMessage}
 		</p>
 	{/if}
 </main>

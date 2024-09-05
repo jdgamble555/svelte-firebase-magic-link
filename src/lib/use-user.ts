@@ -71,7 +71,7 @@ export const sendMagicLink = async (email: string) => {
     }
 };
 
-export const detectMagicLink = () => {
+export const detectMagicLink = async () => {
 
     if (!isMagicLinkURL()) {
         return;
@@ -80,7 +80,7 @@ export const detectMagicLink = () => {
     const email = localStorage.getItem('emailForSignIn');
 
     if (email) {
-        signInWithMagic(email);
+        return await signInWithMagic(email);
     }
 };
 
