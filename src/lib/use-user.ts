@@ -54,8 +54,8 @@ const _useUser = (defaultUser: UserType | null = null) =>
         }
     );
 
-export const getUser = async (): Promise<User | null> =>
-    new Promise((resolve, reject) => {
+export const getUser = async () =>
+    new Promise<User | null>((resolve, reject) => {
         const unsubscribe = onIdTokenChanged(auth, (user) => {
             unsubscribe();
             resolve(user);
