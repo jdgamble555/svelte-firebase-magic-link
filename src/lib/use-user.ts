@@ -54,6 +54,16 @@ const _useUser = (defaultUser: UserType | null = null) =>
         }
     );
 
+export const getUser = async () => {
+    return new Promise<User | null>(
+        (resolve, reject) => onIdTokenChanged(
+            auth,
+            resolve,
+            reject
+        )
+    );
+};
+
 export const useUser = (defaultUser: UserType | null = null) =>
     useSharedStore('user', _useUser, defaultUser);
 
@@ -64,7 +74,7 @@ export const sendMagicLink = async (
     try {
         await sendSignInLinkToEmail(auth, email, {
             handleCodeInApp: true,
-            url: originURL + '/auth/callback'
+            url: originURL + '/auth/callback' // + `?email=${email}`
         });
     } catch (e) {
         if (e instanceof FirebaseError) {
