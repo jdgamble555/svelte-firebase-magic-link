@@ -5,12 +5,10 @@
 	import Loading from './loading.svelte';
 
 	let emailSent = false;
+	let errorMessage: string | null = null;
 
 	let isConfirmPage = isMagicLinkURL();
-
 	$: loading = isMagicLinkURL();
-
-	let errorMessage: string | null = null;
 
 	onMount(() => {
 		detectMagicLink().then((signInError) => {
