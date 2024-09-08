@@ -8,7 +8,7 @@
 	let errorMessage: string | null = null;
 
 	let isConfirmPage = isMagicLinkURL();
-	$: loading = isMagicLinkURL();
+	let loading = isMagicLinkURL();
 
 	onMount(() => {
 		detectMagicLink().then((signInError) => {
@@ -27,6 +27,7 @@
 			isConfirmPage = false;
 			errorMessage = signInError.message;
 		}
+		loading = false;
 	};
 
 	const sendLink = async (event: SubmitEvent) => {
@@ -69,7 +70,7 @@
 			</div>
 		</form>
 		{#if emailSent}
-			<p class="text-red-600">
+			<p class="text-blue-500">
 				Email Sent! Check your mailbox. If you don't see it look under junk or spam!
 			</p>
 		{/if}
