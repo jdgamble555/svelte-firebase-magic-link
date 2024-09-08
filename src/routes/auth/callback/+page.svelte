@@ -10,11 +10,15 @@
 
 	export let data: PageData;
 
+	let loading = true;
+
 	onMount(() => {
 		const email = data.email;
-		if (email) {
-			confirmMagicLink(email);
+		if (!email) {
+			loading = false;
+			return;
 		}
+		confirmMagicLink(email);
 	});
 
 	let errorMessage: string | null = null;
@@ -32,13 +36,11 @@
 			return;
 		}
 		localStorage.removeItem('emailForSignIn');
-
-		// redirect home or to dashboard
 		goto('/');
 	};
 </script>
 
-{#if data.email}
+{#if loading}
 	<Loading />
 	<p class="my-5 text-center text-xl font-bold">Logging you in...</p>
 {:else}

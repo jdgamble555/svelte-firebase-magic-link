@@ -13,6 +13,7 @@ import { readable, type Subscriber } from "svelte/store";
 import { auth } from "./firebase";
 import { dev } from "$app/environment";
 import { FirebaseError } from "firebase/app";
+import { useSharedStore } from "./use-shared";
 
 export const loginWithGoogle = async () =>
     await signInWithPopup(
@@ -30,7 +31,7 @@ export const reLoginWithGoogle = async () => {
 
 export const logout = async () => await signOut(auth);
 
-export const useUser = (defaultUser: UserType | null = null) =>
+const _useUser = (defaultUser: UserType | null = null) =>
     readable<UserType | null>(
         defaultUser,
         (set: Subscriber<UserType | null>) => {
@@ -53,6 +54,9 @@ export const useUser = (defaultUser: UserType | null = null) =>
         }
     );
 
+export const useUser = (defaultUser: UserType | null = null) =>
+    useSharedStore('user', _useUser, defaultUser);
+
 export const sendMagicLink = async (
     email: string,
     originURL: string
@@ -69,7 +73,6 @@ export const sendMagicLink = async (
         }
     }
 };
-
 
 export const signInWithMagic = async (
     email: string,
