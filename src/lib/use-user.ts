@@ -54,15 +54,16 @@ const _useUser = (defaultUser: UserType | null = null) =>
         }
     );
 
-export const getUser = async () => {
-    return new Promise<User | null>(
-        (resolve, reject) => onIdTokenChanged(
-            auth,
-            resolve,
-            reject
-        )
-    );
-};
+export const getUser = async (): Promise<User | null> =>
+    new Promise((resolve, reject) => {
+        const unsubscribe = onIdTokenChanged(auth, (user) => {
+            unsubscribe();
+            resolve(user);
+        }, (error) => {
+            unsubscribe();
+            reject(error);
+        });
+    });
 
 export const useUser = (defaultUser: UserType | null = null) =>
     useSharedStore('user', _useUser, defaultUser);
